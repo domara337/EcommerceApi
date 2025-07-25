@@ -51,3 +51,22 @@ export const getUserById=async(id)=>{
     )
     return result.rows[0];
 }
+
+
+export const updateUserbyId=async(id,updates)=>{
+    
+    //getting the keys of the update field "ex:name"
+    const fields=Object.keys(updates);
+    //setting the values of the keys to values variable
+    const values=Object.values(updates);
+
+    //build set Clause dynimacally 
+    const setClause=fields.map((field,index)=>`${field}=$${index+1}`).join(', ');
+
+    //write the query dynimacally
+    const query=`UPDATE users SET ${setClause}
+    WHERE id=$${fields.length+1} RETURNING *`;
+
+    const result=await db.query(query, [...values, id]);
+    return result.rows[0]
+}

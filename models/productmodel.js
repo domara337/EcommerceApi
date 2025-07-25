@@ -78,3 +78,13 @@ export const UpdateProduct = async (
     );
     return result.rows[0];
 };
+
+
+//searching the db for the keyword using the ILIKE
+export const SearchProduct=async(keyword)=>{
+    const result=await db.query(
+        `SELECT * FROM products WHERE ILIKE $1 
+        OR description ILIKE $1`,
+        [`%${keyword}%`]
+    )
+}
