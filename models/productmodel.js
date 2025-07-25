@@ -88,3 +88,6 @@ export const SearchProduct=async(keyword)=>{
         [`%${keyword}%`]
     )
 }
+
+
+//get the product by category 
