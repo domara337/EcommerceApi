@@ -49,35 +49,40 @@ export const DeleteProduct = async (product_id) => {
     return result.rows[0]; // return the deleted product
 };
 
+
+
+
+
 // 5. Update product by ID
-export const UpdateProduct = async (
-    product_id,
-    product_name,
-    product_description,
-    product_price,
-    product_stock,
-    category_id
-) => {
-    const result = await db.query(
-        `UPDATE products 
-         SET name = $1, 
-             description = $2, 
-             price = $3, 
-             stock = $4, 
-             category_id = $5 
-         WHERE id = $6 
-         RETURNING *`,
-        [
-            product_name,
-            product_description,
-            product_price,
-            product_stock,
-            category_id,
-            product_id
-        ]
-    );
-    return result.rows[0];
+export const UpdateProduct = async (product_id, updates) => {
+  const keys = Object.keys(updates);
+  const values = Object.values(updates);
+
+  if (keys.length === 0) return null;
+
+  // Generate SET clause like: "name = $1, price = $2"
+  const setClause = keys.map((key, idx) => {
+    return `${camelToSnake(key)} = $${idx + 1}`;
+  }).join(', ');
+
+  const query = `
+    UPDATE products
+    SET ${setClause}
+    WHERE id = $${keys.length + 1}
+    RETURNING *;
+  `;
+
+  const result = await db.query(query, [...values, product_id]);
+  return result.rows[0];
 };
+
+// Helper to convert camelCase to snake_case if needed
+function camelToSnake(str) {
+  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+}
+
+
+
 
 
 //searching the db for the keyword using the ILIKE
@@ -91,3 +96,10 @@ export const SearchProduct=async(keyword)=>{
 
 
 //get the product by category 
+export const getProductCategory=async(category)=>{
+    const result=await db.query(
+        `SELECT * FROM products 
+        WHERE category=$1`,
+        [category]
+    )
+}
