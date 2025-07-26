@@ -14,7 +14,7 @@ const cartId=cartResult.rows[0].id;
 
 
   // Get cart items with product info
-    const itemsResult = await client.query(
+    const itemsResult = await db.query(
       `SELECT 
         p.id AS product_id,
         p.name,
@@ -32,6 +32,47 @@ const cartId=cartResult.rows[0].id;
 return {
     items: itemsResult.rows
 }
+
+
+
+}
+
+
+
+//create cart(userid)
+
+
+export const createCart = async (userId) => {
+
+
+//check if the user cart already exists 
+const CartExists=await db.query(
+    'SELECT id FROM carts WHERE user_id=$1',
+    [userId]
+)
+
+
+//check if the cart exists 
+if(CartExists.rows.length>0){
+    return CartExists.rows[0];
+}
+
+
+
+//else, we insert new cart into the carts table '
+const result=await db.query(
+    'INSERT INTO carts(user_id) VALUES ($1) RETURNING *',
+    [userId]
+);
+
+
+return result.rows[0];
+
+};
+
+
+
+
 
 
 
