@@ -35,7 +35,60 @@ catch(err){
 
 
 
+//get order of current user 
+export const getOrders=async(req,res)=>{
 
+try{
+
+//get user id from req.user 
+const getId=req.user.getId();
+
+
+//query db for orders belonging to user 
+const orders=await getOrdersByUserId(getId);
+
+if(!orders) return res.status(404).json({message:"Orders not found"});
+
+res.status(201).json({message: "The operation was successful" , orders: orders})
+
+
+
+
+}
+catch(err){
+
+
+
+res.status(501).json({error:err.message});
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 
