@@ -63,12 +63,52 @@ res.status(501).json({error:err.message});
 
 
 }
+}
+
+
+//get order by id 
+export const getOrderById=async(req,res)=>{
+
+
+
+
+    try{
+
+        //extract order id from the req.params.id
+        const orderId=req.params.id;
+
+
+        const getOrder=getOrderById(orderId);
+
+
+
+
+        if(!getOrder) return res.status(404).json({message:"order not found"})
+
+
+
+        res.status(200).json(getOrder)
 
 
 
 
 
 
+
+
+
+
+
+    }
+catch(err){
+
+
+res.status(501).json({error:err.message})
+
+
+
+
+}
 
 
 
@@ -89,6 +129,29 @@ res.status(501).json({error:err.message});
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
