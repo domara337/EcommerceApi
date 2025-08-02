@@ -136,7 +136,33 @@ export const getallOrders=async(req,res)=>{
 
 
 
+//update order status 
+export const updateOrderstatus=async(req,res)=>{
+    
+    try{
+        //extract order id from req.params.id
+        const orderId=req.params.id; 
 
+        //extract new status from the req.body 
+        const newStatus=req.body.status;
+
+        //update order status in the db 
+        const Updatedstatus=await updateOrderStatus(orderId, newStatus); 
+
+        if(!Updatedstatus) return res.status(404).json({message:"was unable to update the order status"})
+
+        res.status(200).json({message:"Successfully updated the order status" , 
+            order: Updatedstatus
+        })
+
+
+
+
+    }
+    catch(err){
+        res.status(500).json({error: err.message})
+    }
+}
 
 
 
