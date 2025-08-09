@@ -2,12 +2,12 @@ import express from "express";
 
 import { getAllProducts,
     getProductbyId, 
-    SearchProduct, 
-    getProductByCategory,
+    // SearchProduct, 
+    // getProductByCategory,
     AddNewProduct, 
     updateProduct,
     deleteProduct
- } from "../controllers/productController";
+ } from "../controllers/productController.js";
 
  const router=express.Router();
 
@@ -15,8 +15,8 @@ import { getAllProducts,
 
  router.get('/',getAllProducts);
  router.get('/:id',getProductbyId);
- router.get('/category',getProductByCategory)
- router.get('/keyword',SearchProduct)
+//  router.get('/category',getProductByCategory)
+//  router.get('/keyword',SearchProduct)
 
  router.post('/',AddNewProduct);
  router.put('/:id',updateProduct);

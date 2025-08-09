@@ -1,98 +1,41 @@
-import db from "../config/db";
-import {SingleProduct, ViewProducts,InsertProduct,DeleteProduct,UpdateProduct,SearchProduct, UpdateProduct } from "../models/productmodel";
+import db from "../config/db.js";
+import {SingleProduct, ViewProducts,InsertProduct,DeleteProduct,SearchProduct, UpdateProduct } from "../models/productmodel.js";
 import Joi from "joi";
 
 
 
-//get all products 
-export const getAllProducts=async (req,res)=>{
-    //db query to view  all the products 
-    try{
-        const products=await ViewProducts();
+export const getAllProducts = async (req, res) => {
+  try {
+    const { keyword, category } = req.query;
 
+    let products;
 
-        if(!products) return res.status(404).json({message:"Getting all products not implemented"})
-
-            res.status(201).json({products});
-
-
-    }
-    catch(err){
-        res.status(501).json({message:"Get all products operation failed"})
-    }
-}
-
-
-//get a specific product with an id
-export const getProductbyId=async(req,res)=>{
-    try{
-        const getId=req.params.getId;
-
-        const product=await SingleProduct()
-
-        if(!product) return res.status(404).json({message:"could not get product from the db"})
-
-        res.status(201).json({product});
+    if (keyword || category) {
+      products = await SearchProduct(keyword || '', category || '');
+    } else {
+      products = await ViewProducts();
     }
 
-    catch(err){
-        res.status(501).json({error:err.message})
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+export const getProductbyId = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const product = await SingleProduct(id);
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.status(200).json({ product });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-}
-
-
-//search the db using a keyword
-export const SearchProduct=async(req,res)=>{
-    try{
-      //get the keyword from the query 
-      const keyword=req.query.q;
-
-      if(!keyword || keyword.trim()===""){
-        return res.status(400).json({message:"Keyword query (?q=) is required"})
-      }
-
-      //search the db
-      const result=await SearchProduct(keyword);
-
-
-
-      //return results
-      res.status(200).json({products:result.rows})
-
-
-
-
-
-
-
-    }
-    catch(err){
-        res.status(501).json({error:err.message});
-        
-    }
-}
-
-
-//get products by category 
-export const getProductByCategory=async(req,res)=>{
-
-
-    try{
-    const category=req.params.category;
-
-    const getCategory=await getProductByCategory(category);
-
-    if(!getCategory) return res.status(401).json({message: "getting category operation failed"})
-
-        res.status(201).json({message:"operation successful"});
-}
-
-catch(err){
-
-res.status(501).json({error:err.message})
-
-
-}
 }
 
 
@@ -105,7 +48,8 @@ export const AddNewProduct = async (req, res) => {
       product_name: Joi.string().required(),
       product_description: Joi.string().required(),
       product_price: Joi.number().min(0).required(),
-      product_stock: Joi.number().min(0).required()
+      product_stock: Joi.number().min(0).required(),
+      product_category:Joi.string().required()
     });
 
     // Validate req.body
@@ -115,10 +59,10 @@ export const AddNewProduct = async (req, res) => {
     }
 
     // Destructure validated values
-    const { product_name, product_description, product_price, product_stock } = value;
+    const { product_name, product_description, product_price, product_stock,product_category} = value;
 
     // Insert into DB
-    const insertion = await InsertProduct(product_name, product_description, product_price, product_stock);
+    const insertion = await InsertProduct(product_name, product_description, product_price, product_stock,product_category);
 
     // Respond with inserted product
     res.status(201).json({ message: 'Product added successfully', product: insertion });
@@ -176,7 +120,7 @@ if(Object.keys(req.body).length===0){
 
 
     //update product 
-    const updatedProduct=await updateProduct(updateId,value);
+    const updatedProduct=await UpdateProduct(updateId,value);
 
 
     if(!updatedProduct){

@@ -8,23 +8,21 @@ env.config();
 
 
 
-const db=new pg.Client({
+const pool=new pg.Pool({
     user:process.env.PG_USER,
     host:process.env.PG_HOST, 
     database:process.env.PG_DATABASE, 
     password:process.env.PG_PASSWORD, 
-    port:process.env.PG_PORTL, 
+    port:process.env.PG_PORT, 
 
 })
+pool.on('connect', () => {
+    console.log('Connected to the db successfully');
+});
 
+pool.on('error', (err) => {
+    console.error('Unexpected error on idle client', err);
+    process.exit(-1);
+});
 
-try{
-    await db.connect();
-    console.log('connected to the db successfully');
-}
-catch(err){
-    console.error("error connecting to the database", err);
-    process.exit(1);
-}
-
-export default db;
+export default pool;

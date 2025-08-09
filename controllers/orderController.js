@@ -1,6 +1,6 @@
-import db from "../config/db";
-import { createOrder,getOrdersByUserId,getOrderById,getAllOrders,updateOrderStatus } from "../models/ordermodel";
-import { getCartByUserId, clearCart } from "../models/cartmodel";
+import db from "../config/db.js";
+import { createOrder,getOrdersByUserId,findOrderById,getAllOrders,updateOrderStatus } from "../models/ordermodel.js";
+import { getCartByUserId, clearCart } from "../models/cartmodel.js";
 
 
 
@@ -67,7 +67,7 @@ res.status(501).json({error:err.message});
 
 
 //get order by id 
-export const getOrderById=async(req,res)=>{
+export const getOrderByuserId=async(req,res)=>{
 
 
 
@@ -78,7 +78,7 @@ export const getOrderById=async(req,res)=>{
         const orderId=req.params.id;
 
 
-        const getOrder=getOrderById(orderId);
+        const getOrder=findOrderById(orderId);
 
 
 
@@ -113,7 +113,7 @@ export const getallOrders=async(req,res)=>{
     try{
 
           //query db for all orders
-          const orders=await getallOrders();
+          const orders=await getAllOrders();
 
 
           if(!orders) return res.status(404).json({message:"was unable to fetch the orders"})

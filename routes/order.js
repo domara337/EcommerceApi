@@ -3,10 +3,10 @@ import express from "express";
 
 import { placeOrder, 
     getOrders, 
-    getOrderById, 
+    getOrderByuserId, 
     getallOrders,
     updateOrderstatus
- } from "../controllers/orderController";
+ } from "../controllers/orderController.js";
 
 
  const router=express.Router();
@@ -22,7 +22,7 @@ import { placeOrder,
 
 
  //get a specific order by id
- router.get('/:id',getOrderById); 
+ router.get('/:id',getOrderByuserId); 
 
 
  //get all orders 

@@ -3,8 +3,8 @@ import { getSingleCart,
     AddItemToCart, 
     updateCartItem,
     removeItemcart, 
-    clearCart
- } from "../controllers/cartController";
+    clearcart
+ } from "../controllers/cartController.js";
 
 
 
@@ -13,11 +13,11 @@ import { getSingleCart,
 
 
 
-router.getSingleCart('/:id',getSingleCart)
+router.get('/:id',getSingleCart)
 
 router.post('/' , AddItemToCart);
 router.put('/:id',updateCartItem);
 router.delete('/:id',removeItemcart);
-router.delete('/clear/:id' , clearCart);
+router.delete('/clear/:id' , clearcart);
 
 export default router;

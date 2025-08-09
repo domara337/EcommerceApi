@@ -21,20 +21,18 @@ export const InsertProduct = async (
     product_description,
     product_price,
     product_stock,
-    category_id,
-    product_createdAt
+    product_category,
 ) => {
     const result = await db.query(
-        `INSERT INTO products (name, description, price, stock, category_id, created_at) 
-         VALUES ($1, $2, $3, $4, $5, $6) 
+        `INSERT INTO products (name, description, price, stock, category) 
+         VALUES ($1, $2, $3, $4, $5) 
          RETURNING *`,
         [
             product_name,
             product_description,
             product_price,
             product_stock,
-            category_id,
-            product_createdAt
+            product_category
         ]
     );
     return result.rows[0];

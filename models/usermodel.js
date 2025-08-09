@@ -1,4 +1,4 @@
-import db from "../config/db";
+import db from "../config/db.js";
 
 
 
@@ -18,9 +18,9 @@ export const findUserbyEmail=async (email)=>{
 
 
 //write the function to insert into the users table
-export const CreateUsers=async(email, hashed_password)=>{
-    const result=await db.query("INSERT INTO users(email,password_hash) VALUES ($1,$2) RETURNING *" , 
-        [email,hashed_password]
+export const CreateUsers=async(email, hashed_password,name)=>{
+    const result=await db.query("INSERT INTO users(email,password_hash,name) VALUES ($1,$2,$3) RETURNING *" , 
+        [email,hashed_password,name]
     );
     return result.rows[0];
 }
@@ -35,10 +35,10 @@ export const getUsers=async()=>{
 
 
 //write the function to delete the user by id
-export const DeleteUser=async(id)=>{
+export const DeleteUser=async(userId)=>{
     //query to delete the user by id
     const result=await db.query("DELETE FROM users WHERE id=$1 RETURNING *",
-        [id]
+        [userId]
     )
     return result.rows[0];
 }

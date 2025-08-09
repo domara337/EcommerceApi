@@ -1,4 +1,4 @@
-import { findUserbyEmail, getUsers,CreateUsers,DeleteUser,getUserById } from "../models/usermodel";
+import { findUserbyEmail, getUsers,CreateUsers,DeleteUser,getUserById } from "../models/usermodel.js";
 
 
 

@@ -1,5 +1,5 @@
-import db from "../config/db";
-import { getCartByUserId,createCart,addOrUpdateCartItem,updateCartItemQuantity,removeCartItem,clearCart } from "../models/cartmodel";
+import db from "../config/db.js";
+import { getCartByUserId,createCart,addOrUpdateCartItem,updateCartItemQuantity,removeCartItem,clearCart } from "../models/cartmodel.js";
 
 
 
@@ -131,7 +131,7 @@ res.status(500).json({error:err.message});
 
 
 //clear cart 
-export const clearCart=async(req,res)=>{
+export const clearcart=async(req,res)=>{
   try{
     const userId=req.user.userId;
 

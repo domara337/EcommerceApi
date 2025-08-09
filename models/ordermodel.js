@@ -1,4 +1,4 @@
-import db from "../config/db";
+import db from "../config/db.js";
 
 
 
@@ -48,7 +48,7 @@ export const getOrdersByUserId = async (userId) => {
 
 
 
-export const getOrderById = async (orderId) => {
+export const findOrderById = async (orderId) => {
   // Get order details and items
 
   const orderResult = await db.query(

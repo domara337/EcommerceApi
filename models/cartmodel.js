@@ -35,6 +35,10 @@ export const createCart = async (userId) => {
   return { id: res.rows[0].id };
 };
 
+
+
+
+
 // Add or update cart item
 export const addOrUpdateCartItem = async (userId, productId, quantity) => {
   
